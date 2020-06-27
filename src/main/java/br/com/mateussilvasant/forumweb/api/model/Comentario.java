@@ -38,7 +38,7 @@ import lombok.ToString;
 public class Comentario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_comentario")
     private Integer id;
 

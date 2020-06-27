@@ -1,5 +1,6 @@
 package br.com.mateussilvasant.forumweb.api.model;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -18,6 +19,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -33,29 +35,33 @@ import lombok.ToString;
  *
  */
 
- @Builder
- @Data
- @AllArgsConstructor
- @NoArgsConstructor
- @Entity
- @Table(name = "topico")
-public class Topico
-{
+@Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "topico")
+public class Topico {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_topico")
     private Integer id;
 
     @NotBlank
     @Size(max = 100)
-    @Column(name = "titulo",length = 100, nullable = false )    
+    @Column(name = "titulo", length = 100, nullable = false)
     private String titulo;
 
     @NotBlank
     @Size(max = 1500)
-    @Column(name = "conteudo",length = 1500, nullable = false )    
+    @Column(name = "conteudo", length = 1500, nullable = false)
     private String conteudo;
 
+    @Builder.Default
+    @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/mm/yyyy - HH:mm")    
+    @Column(name = "data_criacao",nullable = false)
+    private LocalDateTime dataCriacao =  LocalDateTime.now();
 
     @NotNull
     @EqualsAndHashCode.Exclude
