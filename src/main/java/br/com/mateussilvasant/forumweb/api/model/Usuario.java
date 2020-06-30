@@ -15,8 +15,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "usuario")
-public class Usuario
+public class Usuario 
 {
 
     @Id
@@ -44,6 +44,7 @@ public class Usuario
     private Integer id;
 
 
+    @JsonIgnore
     @NotBlank
     @Size(max = 45)
     @Column(name = "login",length = 45, nullable = false)    
@@ -55,6 +56,7 @@ public class Usuario
     private String nome;
     
     @NotBlank
+    @JsonIgnore
     @Size(max = 12,min = 6)
     @Column(name = "senha",length = 12, nullable = false)  
     private String senha;
@@ -71,7 +73,7 @@ public class Usuario
 
     @Valid
     @EqualsAndHashCode.Exclude
-    @JsonManagedReference
+    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY)
     private Set<Topico> topicos;
 

@@ -13,7 +13,7 @@ public interface UsuarioRepository extends IRepository<Usuario,Integer> {
     
     @Transactional
     @Modifying
-    @Query(value = "UPDATE Usuario AS u SET u.pontos = u.pontos + :pontosRecebido WHERE u.login = :#{#usuarioLogin.login}")
+    @Query(value = "UPDATE Usuario AS u SET u.pontos = u.pontos + :pontosRecebido WHERE u.id = :#{#usuarioLogin.id}")
 	public void atualizarPontos(@Param("usuarioLogin") Usuario usuario, @Param("pontosRecebido")int pontos);
     
 }

@@ -18,10 +18,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,6 +40,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 @Table(name = "topico")
+
 public class Topico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,29 +59,48 @@ public class Topico {
 
     @Builder.Default
     @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/mm/yyyy - HH:mm")    
-    @Column(name = "data_criacao",nullable = false)
-    private LocalDateTime dataCriacao =  LocalDateTime.now();
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    @Column(name = "data_criacao", nullable = false)
+    private LocalDateTime dataCriacao = LocalDateTime.now();
 
     @NotNull
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @JsonBackReference
-    @JsonIgnoreProperties({
-		"topicos",
-	})
+    @JsonIgnoreProperties(value = { "topicos" })
     @ManyToOne
-    @JoinColumn(name = "id_usuario",nullable = false)
+    @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 
-    
     @Valid
     @EqualsAndHashCode.Exclude
-    @JsonManagedReference
-    @OneToMany(mappedBy = "topico",fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_topico")
     private Set<Comentario> comentarios;
 
-    
+    @JsonIgnore
+    public String getConteudoResumo() {
 
+        String resultante = "";
+        String[] paragrafos = conteudo.split("\n");
+        int qtd = paragrafos.length;
+
+        if (qtd > 4) {
+            resultante = montarTexto(paragrafos, 0, 4);
+        } else {
+            resultante = montarTexto(paragrafos, 0, qtd);
+        }
+
+        return resultante;
+    }
+
+    private String montarTexto(String[] paragrafos, int inicio, int fim) {
+        String resultante = "";
+
+        for (int i = inicio; i < fim; i++) {
+            resultante = resultante + paragrafos[i] + "\n";
+        }
+
+        return resultante;
+    }
 
 }

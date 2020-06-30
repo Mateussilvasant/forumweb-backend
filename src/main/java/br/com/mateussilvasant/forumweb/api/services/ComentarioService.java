@@ -45,4 +45,8 @@ public class ComentarioService {
         return repository.findAllTopicosByComentario(topico);
     }
 
+    public long getQuantidadeComentarios(Topico topico) {
+        return repository.countByTopico(topico);
+    }
+
 }

@@ -1,5 +1,9 @@
 package br.com.mateussilvasant.forumweb.api.services;
 
+import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -63,7 +67,15 @@ public class TopicoService {
      * @return retorna o tópico dado um ID
      */
     public Topico consultarTopico(Integer id) {
-        return repository.getOne(id);
+
+        Optional<Topico> opt = repository.findById(id);
+
+        if(opt.isPresent()){
+            return opt.get();
+        } else {
+            throw new EntityNotFoundException();
+        }
+    
     }
 
 }

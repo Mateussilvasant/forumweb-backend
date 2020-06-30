@@ -1,8 +1,10 @@
 package br.com.mateussilvasant.forumweb.api.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -35,13 +37,13 @@ public class UsuarioService {
     @Transactional
     public Usuario cadastrarUsuario(Usuario usuario) {
 
-        ExampleMatcher matcher =  ExampleMatcher.matching();
+        ExampleMatcher matcher = ExampleMatcher.matching();
         GenericPropertyMatcher gen = new GenericPropertyMatcher();
 
         matcher.withMatcher("login", gen.exact());
         matcher.withMatcher("email", gen.exact());
 
-        if(!repository.exists(Example.of(usuario, matcher))){
+        if (!repository.exists(Example.of(usuario, matcher))) {
             Usuario usuarioSalvo = repository.save(usuario);
             repository.refresh(usuarioSalvo);
             return usuarioSalvo;
@@ -51,12 +53,26 @@ public class UsuarioService {
 
     }
 
-
     /**
      * @return retorna a lista de ranking de usuarios.
      */
-    public List<Usuario> listarRanking()  {
+    public List<Usuario> listarRanking() {
         return repository.findAll(Sort.by(Direction.ASC, "pontos"));
+    }
+
+     /**
+     * @return retorna a entidade usuario
+     */
+    public Usuario consultarUsuario(Integer id) {
+
+        Optional<Usuario> opt = repository.findById(id);
+
+        if (opt.isPresent()) {
+            return opt.get();
+        } else {
+            throw new EntityNotFoundException();
+        }
+
     }
 
 }
