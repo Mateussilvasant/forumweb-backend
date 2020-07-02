@@ -13,7 +13,7 @@ public interface ComentarioRepository extends IRepository<Comentario,Integer>{
 
 
     @Query(value = "SELECT c FROM Comentario AS c where c.topico = :topico order by c.topico.id asc")
-	List<Comentario> findAllTopicosByComentario(@Param("topico") Topico topico);
+	List<Comentario> findAllComentariosByTopico(@Param("topico") Topico topico);
 
 	long countByTopico(Topico topico);
     

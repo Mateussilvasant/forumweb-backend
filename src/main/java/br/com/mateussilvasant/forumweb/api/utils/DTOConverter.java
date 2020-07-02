@@ -34,7 +34,7 @@ public class DTOConverter<D, E> {
     return mapper.map(entity, typeDTO);
   }
 
-  public Page<D> converterAllToDTO(Page<E> entities, Function<D, D> servicesDTO, PropertyMap<E, D> eMap) {
+  public Page<D> converterAllToDTO(Page<E> entities, Function<D, D> action, PropertyMap<E, D> eMap) {
 
     mapper = new ModelMapper();
 
@@ -47,7 +47,7 @@ public class DTOConverter<D, E> {
       @Override
       public D apply(E t) {
         D dto = convertEntitiy(t);
-        D dtoModifield = servicesDTO.apply(dto);
+        D dtoModifield = action.apply(dto);
         return dtoModifield;
       }
 

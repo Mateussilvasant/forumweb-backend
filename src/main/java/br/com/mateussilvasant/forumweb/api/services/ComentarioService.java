@@ -42,7 +42,7 @@ public class ComentarioService {
      */
     public List<Comentario> getListaComentarios(Topico topico)
     {
-        return repository.findAllTopicosByComentario(topico);
+        return repository.findAllComentariosByTopico(topico);
     }
 
     public long getQuantidadeComentarios(Topico topico) {
